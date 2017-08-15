@@ -11,16 +11,13 @@
       worker.terminate()
     }
 
-    const { Blob, URL, Worker } = window
+    const { Blob, Image, URL, Worker } = window
 
     const canvas = document.createElement('canvas')
     const offscreen = canvas.transferControlToOffscreen()
 
     canvas.width = onscreen.width
     canvas.height = onscreen.height
-
-    onscreen.parentNode.replaceChild(canvas, onscreen)
-    onscreen = canvas
 
     const blob = new Blob([script.replace(/\{\{config\}\}/g, config.value)], { type: 'text/javascript' })
     const oUrl = URL.createObjectURL(blob)
@@ -31,10 +28,30 @@
 
     worker.postMessage({ canvas: offscreen }, [offscreen])
     worker.addEventListener('message', function (event) {
-      const { width, height } = event.data
+      const { type, width, height, blob } = event.data
 
-      onscreen.width = width
-      onscreen.height = height
+      switch (type) {
+        case 'size':
+          canvas.width = width
+          canvas.height = height
+
+          onscreen.parentNode.replaceChild(canvas, onscreen)
+          onscreen = canvas
+          break
+        case 'data':
+          const oUrl = URL.createObjectURL(blob)
+          const anchor = document.createElement('a')
+          const img = new Image()
+
+          anchor.appendChild(img)
+          img.addEventListener('load', () => {
+            onscreen.parentNode.replaceChild(anchor, onscreen)
+            onscreen = anchor
+          })
+
+          anchor.setAttribute('href', oUrl)
+          img.src = oUrl
+      }
     })
   })
 })()

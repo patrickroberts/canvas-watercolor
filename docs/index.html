@@ -19,12 +19,18 @@ this.addEventListener('message', async function (event) {
   const canvas = event.data.canvas
   const config = Object.assign({{config}}, { canvas })
 
-  postMessage({ width: config.width, height: config.height })
+  postMessage({ type: 'size', width: config.width, height: config.height })
 
   const watercolor = new Watercolor(config)
 
   await watercolor.process()
   await watercolor.context.commit()
+
+  const blob = await canvas.convertToBlob()
+
+  postMessage({ type: 'data', blob })
+
+  close()
 })
 </script>
 
@@ -69,13 +75,13 @@ this.addEventListener('message', async function (event) {
 <textarea class="textarea" rows="12" id="configuration">{
   width: 256, // px
   height: 128, // px
-  // depth: 5, // 1 - 8
+  depth: 5, // 1 - 8
   priority: 1, // 0 - 8
   select: 'min', // 'min', 'max', 'median', 'average'
-  weights: 'default', // 'default', 'natural', [.2126, .7152, .0722]
-  focus: [50, 50], // [%, %]
+  weights: 'natural', // 'default', 'natural', [.2126, .7152, .0722]
+  focus: [0, 0], // [%, %]
   interval: 30, // ms
-  sort: (c1, c2) => c1.r - c2.r + (c1.g - c2.g) / 7 + c2.b - c1.b,
+  sort: (c1, c2) => c1.r - c2.r + (c1.g - c2.g) / 3 + c2.b - c1.b,
   shuffle: false // true, false
 }</textarea>
 

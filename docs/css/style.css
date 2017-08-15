@@ -1,8 +1,12 @@
+template {
+  display: none;
+}
+
 .navbar-brand > .navbar-item > img {
   margin-right: .5em;
 }
 
-canvas {
+.control canvas, .control img {
   box-sizing: content-box;
   border: 1px solid #000;
 }
