@@ -5,7 +5,7 @@ gulp.task('docs:static', () => {
     .pipe(gulp.dest('docs'))
 })
 
-gulp.task('docs:umd', () => {
+gulp.task('docs:umd', ['bundle'], () => {
   gulp.src('umd/*')
     .pipe(gulp.dest('docs/js'))
 })
