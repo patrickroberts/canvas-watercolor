@@ -1,0 +1,12 @@
+{
+  "paths": {
+    "lib": {
+      "src": "lib/index.js",
+      "dst": "umd"
+    }
+  },
+  "names": {
+    "lib": "watercolor.min.js",
+    "glob": "Watercolor"
+  }
+}

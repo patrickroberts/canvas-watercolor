@@ -1,0 +1,15 @@
+.navbar-brand > .navbar-item > img {
+  margin-right: .5em;
+}
+
+canvas {
+  box-sizing: content-box;
+  border: 1px solid #000;
+}
+
+textarea.textarea {
+  max-height: none;
+  height: initial;
+  font-family: monospace;
+  font-size: 80%;
+}
