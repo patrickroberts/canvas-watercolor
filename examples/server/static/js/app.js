@@ -19,7 +19,7 @@
     canvas.width = onscreen.width
     canvas.height = onscreen.height
 
-    const blob = new Blob([script.replace(/\{\{config\}\}/g, config.value)], { type: 'text/javascript' })
+    const blob = new Blob([script.replace(/\{\{config\}\}/g, config.value)], { type: 'application/javascript' })
     const oUrl = URL.createObjectURL(blob)
 
     worker = new Worker(oUrl)
@@ -50,6 +50,7 @@
           })
 
           anchor.setAttribute('href', oUrl)
+          anchor.setAttribute('download', 'watercolor.png')
           img.src = oUrl
       }
     })

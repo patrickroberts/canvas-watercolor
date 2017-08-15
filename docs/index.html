@@ -13,7 +13,14 @@
 <script type="application/x-worker" id="worker">
 importScripts('https://patrickroberts.github.io/canvas-watercolor/js/watercolor.min.js')
 
-const { Watercolor, close, postMessage } = this
+const { OffscreenCanvas, Watercolor, close, postMessage } = this
+
+// polyfill
+Object.defineProperty(OffscreenCanvas.prototype, 'toBlob', {
+  configurable: true,
+  value: OffscreenCanvas.prototype.toBlob || OffscreenCanvas.prototype.convertToBlob,
+  writable: true
+})
 
 this.addEventListener('message', async function (event) {
   const canvas = event.data.canvas
@@ -26,7 +33,7 @@ this.addEventListener('message', async function (event) {
   await watercolor.process()
   await watercolor.context.commit()
 
-  const blob = await canvas.convertToBlob()
+  const blob = await canvas.toBlob()
 
   postMessage({ type: 'data', blob })
 
