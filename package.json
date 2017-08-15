@@ -11,7 +11,14 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "standard"
+    "prepublishOnly": "npm run build && npm test",
+    "build": "gulp",
+    "test": "standard",
+    "start": "examples/server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrickroberts/canvas-watercolor.git"
   },
   "keywords": [
     "canvas",
@@ -21,6 +28,10 @@
   ],
   "author": "Patrick Roberts",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patrickroberts/canvas-watercolor/issues"
+  },
+  "homepage": "https://github.com/patrickroberts/canvas-watercolor#readme",
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babelify": "^7.3.0",
