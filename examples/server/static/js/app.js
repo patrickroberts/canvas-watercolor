@@ -44,6 +44,7 @@
           const img = new Image()
 
           anchor.appendChild(img)
+
           img.addEventListener('load', () => {
             onscreen.parentNode.replaceChild(anchor, onscreen)
             onscreen = anchor

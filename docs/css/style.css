@@ -1,12 +1,18 @@
-template {
-  display: none;
+.navbar-brand > .navbar-item > img {
+  margin-right: .5rem;
 }
 
-.navbar-brand > .navbar-item > img {
-  margin-right: .5em;
+.hero-body, .section {
+  padding: 1.5rem;
+}
+
+.column.is-narrow {
+  max-width: 100%;
 }
 
 .control canvas, .control img {
+  max-width: 100%;
+  max-height: calc(100vh - 3rem);
   box-sizing: content-box;
   border: 1px solid #000;
 }
