@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css" />
 
 <script type="application/x-worker" id="worker">
-importScripts('https://patrickroberts.github.io/canvas-watercolor/js/watercolor.min.js')
+importScripts('http://localhost:8000/js/watercolor.min.js')
 
 const { OffscreenCanvas, Watercolor, close, postMessage } = this
 
@@ -79,7 +79,7 @@ this.addEventListener('message', async function (event) {
             <label class="label">Configuration</label>
             <div class="control">
 
-<textarea class="textarea" rows="12" id="configuration">{
+<textarea class="textarea" rows="13" id="configuration">{
   width: 256, // px
   height: 128, // px
   depth: 5, // 1 - 8
@@ -89,7 +89,8 @@ this.addEventListener('message', async function (event) {
   focus: [0, 0], // [%, %]
   interval: 30, // ms
   sort: (c1, c2) => c1.r - c2.r + (c1.g - c2.g) / 3 + c2.b - c1.b,
-  shuffle: false // true, false
+  shuffle: false, // true, false
+  seed: 123456789
 }</textarea>
 
             </div>
