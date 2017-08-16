@@ -6,6 +6,14 @@
   let onscreen = document.getElementById('watercolor')
   let worker = null
 
+  function resolve (relative) {
+    const anchor = document.createElement('a')
+
+    anchor.href = relative
+
+    return anchor.href
+  }
+
   generate.addEventListener('click', function () {
     if (worker !== null) {
       worker.terminate()
@@ -19,7 +27,11 @@
     canvas.width = onscreen.width
     canvas.height = onscreen.height
 
-    const blob = new Blob([script.replace(/\{\{config\}\}/g, config.value)], { type: 'application/javascript' })
+    const blob = new Blob([
+      script
+        .replace(/\{\{config\}\}/g, config.value)
+        .replace(/\{\{url\}\}/g, resolve('js/watercolor.min.js'))
+    ], { type: 'application/javascript' })
     const oUrl = URL.createObjectURL(blob)
 
     worker = new Worker(oUrl)

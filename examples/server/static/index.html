@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css" />
 
 <script type="application/x-worker" id="worker">
-importScripts('http://localhost:8000/js/watercolor.min.js')
+importScripts('{{url}}')
 
 const { OffscreenCanvas, Watercolor, close, postMessage } = this
 
