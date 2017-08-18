@@ -1,11 +1,9 @@
-(function () {
-  const script = document.getElementById('worker').textContent
-  const config = document.getElementById('configuration')
-  const generate = document.getElementById('generate')
+(async function () {
+  'use strict'
 
-  let onscreen = document.getElementById('watercolor')
-  let worker = null
+  const { Blob, HTMLCanvasElement, Image, URL, Worker, document, fetch } = window
 
+  /* resolves URLs relative to document using <a>.href */
   function resolve (relative) {
     const anchor = document.createElement('a')
 
@@ -14,23 +12,37 @@
     return anchor.href
   }
 
+  /* get worker script as text template */
+  const script = await fetch(resolve('js/worker.js')).then(body => body.text())
+  const config = document.getElementById('configuration')
+  const generate = document.getElementById('generate')
+
+  let onscreen = document.getElementById('watercolor')
+  let worker = null
+
   generate.addEventListener('click', function () {
     if (worker !== null) {
       worker.terminate()
     }
 
-    const { Blob, Image, URL, Worker } = window
-
     const canvas = document.createElement('canvas')
-    const offscreen = canvas.transferControlToOffscreen()
 
-    canvas.width = onscreen.width
-    canvas.height = onscreen.height
+    if (onscreen instanceof HTMLCanvasElement) {
+      canvas.width = onscreen.width
+      canvas.height = onscreen.height
+    } else {
+      const image = onscreen.querySelector('img')
+
+      canvas.width = image.naturalWidth
+      canvas.height = image.naturalHeight
+    }
+
+    const offscreen = canvas.transferControlToOffscreen()
 
     const blob = new Blob([
       script
-        .replace(/\{\{config\}\}/g, config.value)
-        .replace(/\{\{url\}\}/g, resolve('js/watercolor.min.js'))
+        .replace(/\/\*(.*?)\{\{config\}\}(.*?)\*\//g, (match, before, after) => before + config.value + after)
+        .replace(/\/\*(.*?)\{\{url\}\}(.*?)\*\//g, (match, before, after) => before + resolve('js/watercolor.min.js') + after)
     ], { type: 'application/javascript' })
     const oUrl = URL.createObjectURL(blob)
 

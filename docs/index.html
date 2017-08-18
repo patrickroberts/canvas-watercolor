@@ -9,38 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.min.css" integrity="sha256-VC9bpAao257nf22leBRLU7AqKGwS9/Ylz8hfpHmOob4=" crossorigin="anonymous" />
     <link rel="stylesheet" href="css/style.css" />
-
-<script type="application/x-worker" id="worker">
-importScripts('{{url}}')
-
-const { OffscreenCanvas, Watercolor, close, postMessage } = this
-
-// polyfill
-Object.defineProperty(OffscreenCanvas.prototype, 'toBlob', {
-  configurable: true,
-  value: OffscreenCanvas.prototype.toBlob || OffscreenCanvas.prototype.convertToBlob,
-  writable: true
-})
-
-this.addEventListener('message', async function (event) {
-  const canvas = event.data.canvas
-  const config = Object.assign({{config}}, { canvas })
-
-  postMessage({ type: 'size', width: config.width, height: config.height })
-
-  const watercolor = new Watercolor(config)
-
-  await watercolor.process()
-  await watercolor.context.commit()
-
-  const blob = await canvas.toBlob()
-
-  postMessage({ type: 'data', blob })
-
-  close()
-})
-</script>
-
   </head>
   <body>
     <nav class="navbar">
