@@ -29,11 +29,12 @@ this.addEventListener('message', async function (event) {
     }
   }
 
-  const watercolor = new Watercolor(config)
   const iterator = generator(performance.now.bind(performance), config.interval)
   const shouldCommit = function shouldCommit () {
     return this().value
   }.bind(iterator.next.bind(iterator))
+
+  const watercolor = new Watercolor(config)
 
   canvas.width = config.width
   canvas.height = config.height
