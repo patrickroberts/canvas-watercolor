@@ -16,8 +16,6 @@ this.addEventListener('message', async function (event) {
   const context = canvas.getContext('2d')
   const config = Object.assign(/* {{config}}, */{ context })
 
-  postMessage({ type: 'size', width: config.width, height: config.height })
-
   function * generator (now, interval = 30, last = now()) {
     while (true) {
       while (now() - last < interval) {
@@ -36,12 +34,9 @@ this.addEventListener('message', async function (event) {
 
   const watercolor = new Watercolor(config)
 
-  canvas.width = config.width
-  canvas.height = config.height
-
   await watercolor.process(shouldCommit)
 
-  postMessage({ type: 'data', blob: await canvas.toBlob() })
+  postMessage(await canvas.toBlob())
 
   close()
 })

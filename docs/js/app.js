@@ -26,16 +26,13 @@
     }
 
     const canvas = document.createElement('canvas')
+    const { width, height } = eval(`(${config.value})`)
 
-    if (onscreen instanceof HTMLCanvasElement) {
-      canvas.width = onscreen.width
-      canvas.height = onscreen.height
-    } else {
-      const image = onscreen.querySelector('img')
+    canvas.width = width
+    canvas.height = height
 
-      canvas.width = image.naturalWidth
-      canvas.height = image.naturalHeight
-    }
+    onscreen.parentNode.replaceChild(canvas, onscreen)
+    onscreen = canvas
 
     const offscreen = canvas.transferControlToOffscreen()
 
@@ -52,32 +49,21 @@
 
     worker.postMessage({ canvas: offscreen }, [offscreen])
     worker.addEventListener('message', function (event) {
-      const { type, width, height, blob } = event.data
+      const blob = event.data
+      const oUrl = URL.createObjectURL(blob)
+      const anchor = document.createElement('a')
+      const img = new Image()
 
-      switch (type) {
-        case 'size':
-          canvas.width = width
-          canvas.height = height
+      anchor.appendChild(img)
 
-          onscreen.parentNode.replaceChild(canvas, onscreen)
-          onscreen = canvas
-          break
-        case 'data':
-          const oUrl = URL.createObjectURL(blob)
-          const anchor = document.createElement('a')
-          const img = new Image()
+      img.addEventListener('load', () => {
+        onscreen.parentNode.replaceChild(anchor, onscreen)
+        onscreen = anchor
+      })
 
-          anchor.appendChild(img)
-
-          img.addEventListener('load', () => {
-            onscreen.parentNode.replaceChild(anchor, onscreen)
-            onscreen = anchor
-          })
-
-          anchor.setAttribute('href', oUrl)
-          anchor.setAttribute('download', 'watercolor.png')
-          img.src = oUrl
-      }
+      anchor.setAttribute('href', oUrl)
+      anchor.setAttribute('download', 'watercolor.png')
+      img.src = oUrl
     })
   })
 })()
