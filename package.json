@@ -38,11 +38,9 @@
     "browserify": "^14.4.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.6.0",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
+    "gulp-terser": "^1.2.0",
     "require-dir": "^0.3.2",
     "standard": "^10.0.3",
-    "uglify-es": "^3.0.27",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },

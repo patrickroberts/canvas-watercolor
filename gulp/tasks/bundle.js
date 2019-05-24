@@ -6,12 +6,7 @@ const browserify = require('browserify')
 const source = require('vinyl-source-stream')
 const buffer = require('vinyl-buffer')
 const sourcemaps = require('gulp-sourcemaps')
-const gutil = require('gulp-util')
-
-const uglify = require('uglify-es')
-const composer = require('gulp-uglify/composer')
-
-const minify = composer(uglify, console)
+const terser = require('gulp-terser')
 
 const config = require('../config')
 
@@ -25,17 +20,15 @@ gulp.task('bundle', () => {
     debug: true,
     entries: rootbase,
     basedir: rootdir,
-    standalone: config.names.glob
+    standalone: config.names.glob,
+    transform: [babelify]
   })
 
-  return browser
-    .transform(babelify)
-    .bundle()
+  return browser.bundle()
     .pipe(source(config.names.lib))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(minify())
-    .on('error', gutil.log)
+    .pipe(terser())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.paths.lib.dst))
 })
