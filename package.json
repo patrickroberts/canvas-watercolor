@@ -34,7 +34,7 @@
   "homepage": "https://github.com/patrickroberts/canvas-watercolor#readme",
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babelify": "^7.3.0",
+    "babelify": "^10.0.0",
     "browserify": "^14.4.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.6.0",
